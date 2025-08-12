@@ -1,98 +1,76 @@
 # Task2i
-// Motor pins
-const int motorLeftForward = 2;
-const int motorLeftBackward = 3;
-const int motorRightForward = 4;
-const int motorRightBackward = 5;
+#include <iostream>
+using namespace std;
+#include <string>
+using namespace std;
 
-// IR sensor pins
-const int sensorLeft = A0;
-const int sensorRight = A1;
+string orders[50] = {
+        "101", "102", "103", "104", "105", "106", "107", "108", "109", "110",
+        "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
+        "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
+        "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
+        "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"
+};
+string cnames[50] = {"Thabo","Lerato","Nomvula","Sipho","Bongani","Lindiwe","Jabulani","Ayanda","Kgosi","Refilwe"};
+int noofmag[50] = {3,5,2,4,6,1,3,2,6,4};
+float torders[50] = {15.75,30.50,10.00,22.00,40.25,5.50,18.00,12.75,28.00,24.50};
+int len = 10;
+int main() {
+    int option = 0;
+    while (true){
+        cout << "Order Management" << endl;
+        cout << "1. Add a new order" << endl;
+        cout << "2. Display all orders" << endl;
+        cout << "3. Find an order by order ID" << endl;
+        cout << "4. Calculate total revenue" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Enter you choice(1-5): ";
+        cin >> option;
+        if(option == 1)
+        {int idnumber;
+        if (len != 50)
+        {
+            idnumber = stoi(orders[len-1])+1;
+            cout << "Enter ID: "<<idnumber<<endl;
+            orders[len] = to_string(idnumber);
 
-// Sensor threshold (adjust after testing)
-const int threshold = 500;
+            cout << "Enter Customer Name: ";
+            cin>> cnames[len];
 
-// Motor speed
-const int speed = 150;
+            cout << "Enter Number of Magwinyas Ordered: ";
+            cin>> noofmag[len];
 
-void setup() {
-  pinMode(motorLeftForward, OUTPUT);
-  pinMode(motorLeftBackward, OUTPUT);
-  pinMode(motorRightForward, OUTPUT);
-  pinMode(motorRightBackward, OUTPUT);
-  pinMode(sensorLeft, INPUT);
-  pinMode(sensorRight, INPUT);
+            cout << "total: ";
+            cin>> torders[len];
+            cout<<"Entry successful!"<<endl;
+
+            len = len +1;
+        } else
+            cout << "No more space in array"<< endl;
+        }
+        else if (option == 2 )
+        {cout<<"All oders";
+        for (int i = 0; i <=49; i++){
+            if (orders[i] != "0"){
+                cout<<"ID: "<<orders[i],
+                cout<<"Customer Name: "<<cnames[i],
+                cout<<"No of mag"<<noofmag[i],
+                cout<<"Total: "<<torders[i];
+                cout<<""<<endl;
+            }
+        }
+        }
+        else if (option == 3 )
+        {}
+        else if (option == 4 )
+        {}
+        else if (option == 5 ) {
+            cout << "program closed" << endl;
+            exit(0);
+        }
+
+        else
+            cout << "Invalid Option, Choose (1-5)"<<endl;
+    }
+    return 0;
 }
-
-void loop() {
-  int leftSensorValue = analogRead(sensorLeft);
-  int rightSensorValue = analogRead(sensorRight);
-
-  bool leftOnLine = leftSensorValue < threshold;
-  bool rightOnLine = rightSensorValue < threshold;
-
-  if (leftOnLine && rightOnLine) {
-    // Both sensors see black -> move forward
-    forward();
-  } else if (!leftOnLine && rightOnLine) {
-    // Left is off (white), right is on (black) -> turn left
-    turnLeft();
-  } else if (leftOnLine && !rightOnLine) {
-    // Right is off, left is on -> turn right
-    turnRight();
-  } else {
-    // Both off line -> stop briefly, then turn around to search
-    stopCar();
-    delay(200);
-    reverseTurn();
-  }
-}
-
-// Move forward
-void forward() {
-  analogWrite(motorLeftForward, speed);
-  analogWrite(motorRightForward, speed);
-  digitalWrite(motorLeftBackward, LOW);
-  digitalWrite(motorRightBackward, LOW);
-}
-
-// Turn left (pivot)
-void turnLeft() {
-  analogWrite(motorRightForward, speed);
-  digitalWrite(motorLeftForward, LOW);
-  digitalWrite(motorLeftBackward, LOW);
-  digitalWrite(motorRightBackward, LOW);
-}
-
-// Turn right (pivot)
-void turnRight() {
-  analogWrite(motorLeftForward, speed);
-  digitalWrite(motorRightForward, LOW);
-  digitalWrite(motorLeftBackward, LOW);
-  digitalWrite(motorRightBackward, LOW);
-}
-
-// Stop all motors
-void stopCar() {
-  digitalWrite(motorLeftForward, LOW);
-  digitalWrite(motorLeftBackward, LOW);
-  digitalWrite(motorRightForward, LOW);
-  digitalWrite(motorRightBackward, LOW);
-}
-
-// Reverse turn to search for line
-void reverseTurn() {
-  // Reverse a bit
-  analogWrite(motorLeftBackward, speed);
-  analogWrite(motorRightBackward, speed);
-  digitalWrite(motorLeftForward, LOW);
-  digitalWrite(motorRightForward, LOW);
-  delay(300);
-
-  // Pivot to find the line again
-  analogWrite(motorLeftBackward, speed);
-  digitalWrite(motorRightBackward, LOW);
-  digitalWrite(motorLeftForward, LOW);
-  digitalWrite(motorRightForward, LOW);
-  delay(300);
-}Sengizoqobela lento
